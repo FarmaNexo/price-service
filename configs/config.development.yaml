@@ -37,8 +37,8 @@ aws:
   endpoint: ""
 
 sqs:
-  price_events_queue_url: "${SQS_PRICE_EVENTS_URL}"
-  pharmacy_events_queue_url: "${SQS_PHARMACY_EVENTS_URL}"
+  price_events_queue_url: "${SQS_PRICE_EVENTS_QUEUE_URL}"
+  pharmacy_events_queue_url: "${SQS_PHARMACY_EVENTS_QUEUE_URL}"
 
 services:
   pharmacy_service:
