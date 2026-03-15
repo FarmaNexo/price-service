@@ -8,10 +8,10 @@ server:
   idle_timeout: 60s
 
 database:
-  host: ${DB_HOST}
+  host: "${DB_HOST}"
   port: 5432
-  user: ${DB_USER}
-  password: ${DB_PASSWORD}
+  user: "${DB_USER}"
+  password: "${DB_PASSWORD}"
   db_name: price_db
   schema: price
   sslmode: require
@@ -20,31 +20,31 @@ database:
   conn_max_lifetime: 5m
 
 jwt:
-  secret: ${JWT_SECRET}
+  secret: "${JWT_SECRET}"
   access_token_duration: 15m
   issuer: "farmanexo-price-service"
 
 redis:
-  host: ${REDIS_HOST}
+  host: "${REDIS_HOST}"
   port: 6379
-  password: ${REDIS_PASSWORD}
+  password: "${REDIS_PASSWORD}"
   db: 0
   max_retries: 3
   pool_size: 10
 
 aws:
-  region: ${AWS_REGION}
+  region: "${AWS_REGION}"
   endpoint: ""
 
 sqs:
-  price_events_queue_url: ${SQS_PRICE_EVENTS_URL}
-  pharmacy_events_queue_url: ${SQS_PHARMACY_EVENTS_URL}
+  price_events_queue_url: "${SQS_PRICE_EVENTS_URL}"
+  pharmacy_events_queue_url: "${SQS_PHARMACY_EVENTS_URL}"
 
 services:
   pharmacy_service:
-    base_url: ${PHARMACY_SERVICE_URL}
+    base_url: "${PHARMACY_SERVICE_URL}"
   catalog_service:
-    base_url: ${CATALOG_SERVICE_URL}
+    base_url: "${CATALOG_SERVICE_URL}"
 
 consumer:
   enabled: true
