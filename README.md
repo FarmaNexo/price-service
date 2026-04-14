@@ -77,24 +77,24 @@ El servicio usa archivos YAML en `configs/`:
 
 | Método | Endpoint | Descripción |
 |---|---|---|
-| POST | `/api/v1/price/compare` | Comparar precios de un producto |
-| GET | `/api/v1/price/compare/generic-vs-brand/{id}` | Comparación genérico vs marca |
-| GET | `/api/v1/price/history/{id}` | Historial de precios |
+| POST | `/api/v1/prices/compare` | Comparar precios de un producto |
+| GET | `/api/v1/prices/compare/generic-vs-brand/{id}` | Comparación genérico vs marca |
+| GET | `/api/v1/prices/history/{id}` | Historial de precios |
 
 ### Autenticados (JWT)
 
 | Método | Endpoint | Descripción |
 |---|---|---|
-| POST | `/api/v1/price/alerts` | Crear alerta de precio |
-| GET | `/api/v1/price/alerts` | Listar mis alertas |
-| DELETE | `/api/v1/price/alerts/{id}` | Eliminar alerta |
+| POST | `/api/v1/prices/alerts` | Crear alerta de precio |
+| GET | `/api/v1/prices/alerts` | Listar mis alertas |
+| DELETE | `/api/v1/prices/alerts/{id}` | Eliminar alerta |
 
 ### Admin (JWT + role admin)
 
 | Método | Endpoint | Descripción |
 |---|---|---|
-| GET | `/api/v1/price/stats/{id}` | Estadísticas de precios |
-| POST | `/api/v1/price/record` | Registrar precio manualmente |
+| GET | `/api/v1/prices/stats/{id}` | Estadísticas de precios |
+| POST | `/api/v1/prices/record` | Registrar precio manualmente |
 
 ### Utilidad
 

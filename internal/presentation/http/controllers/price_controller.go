@@ -82,7 +82,7 @@ func (c *PriceController) HealthCheck(w http.ResponseWriter, r *http.Request) {
 // @Success      200   {object}  common.ApiResponse[responses.PriceComparisonResponse]
 // @Failure      400   {object}  common.ApiResponse[responses.PriceComparisonResponse]
 // @Failure      500   {object}  common.ApiResponse[responses.PriceComparisonResponse]
-// @Router       /api/v1/price/compare [post]
+// @Router       /api/v1/prices/compare [post]
 func (c *PriceController) ComparePrices(w http.ResponseWriter, r *http.Request) {
 	var req requests.ComparePricesRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -118,7 +118,7 @@ func (c *PriceController) ComparePrices(w http.ResponseWriter, r *http.Request) 
 // @Param        limit       query    int     false  "Límite de registros"  default(50)
 // @Success      200  {object}  common.ApiResponse[responses.PriceHistoryListResponse]
 // @Failure      500  {object}  common.ApiResponse[responses.PriceHistoryListResponse]
-// @Router       /api/v1/price/history/{id} [get]
+// @Router       /api/v1/prices/history/{id} [get]
 func (c *PriceController) GetPriceHistory(w http.ResponseWriter, r *http.Request) {
 	productID := chi.URLParam(r, "id")
 	pharmacyID := r.URL.Query().Get("pharmacy_id")
@@ -146,7 +146,7 @@ func (c *PriceController) GetPriceHistory(w http.ResponseWriter, r *http.Request
 // @Param        id  path     string  true  "Product ID"
 // @Success      200  {object}  common.ApiResponse[responses.GenericVsBrandResponse]
 // @Failure      500  {object}  common.ApiResponse[responses.GenericVsBrandResponse]
-// @Router       /api/v1/price/compare/generic-vs-brand/{id} [get]
+// @Router       /api/v1/prices/compare/generic-vs-brand/{id} [get]
 func (c *PriceController) GetGenericVsBrand(w http.ResponseWriter, r *http.Request) {
 	productID := chi.URLParam(r, "id")
 
@@ -174,7 +174,7 @@ func (c *PriceController) GetGenericVsBrand(w http.ResponseWriter, r *http.Reque
 // @Failure      400   {object}  common.ApiResponse[responses.PriceAlertResponse]
 // @Failure      401   {object}  common.ApiResponse[responses.PriceAlertResponse]
 // @Failure      409   {object}  common.ApiResponse[responses.PriceAlertResponse]
-// @Router       /api/v1/price/alerts [post]
+// @Router       /api/v1/prices/alerts [post]
 func (c *PriceController) CreatePriceAlert(w http.ResponseWriter, r *http.Request) {
 	userID, ok := middlewares.GetUserIDFromContext(r.Context())
 	if !ok {
@@ -209,7 +209,7 @@ func (c *PriceController) CreatePriceAlert(w http.ResponseWriter, r *http.Reques
 // @Security     BearerAuth
 // @Success      200  {object}  common.ApiResponse[responses.PriceAlertListResponse]
 // @Failure      401  {object}  common.ApiResponse[responses.PriceAlertListResponse]
-// @Router       /api/v1/price/alerts [get]
+// @Router       /api/v1/prices/alerts [get]
 func (c *PriceController) ListPriceAlerts(w http.ResponseWriter, r *http.Request) {
 	userID, ok := middlewares.GetUserIDFromContext(r.Context())
 	if !ok {
@@ -235,7 +235,7 @@ func (c *PriceController) ListPriceAlerts(w http.ResponseWriter, r *http.Request
 // @Success      200  {object}  common.ApiResponse[responses.DeleteAlertResponse]
 // @Failure      401  {object}  common.ApiResponse[responses.DeleteAlertResponse]
 // @Failure      404  {object}  common.ApiResponse[responses.DeleteAlertResponse]
-// @Router       /api/v1/price/alerts/{id} [delete]
+// @Router       /api/v1/prices/alerts/{id} [delete]
 func (c *PriceController) DeletePriceAlert(w http.ResponseWriter, r *http.Request) {
 	userID, ok := middlewares.GetUserIDFromContext(r.Context())
 	if !ok {
@@ -268,7 +268,7 @@ func (c *PriceController) DeletePriceAlert(w http.ResponseWriter, r *http.Reques
 // @Success      200  {object}  common.ApiResponse[responses.PriceStatsResponse]
 // @Failure      401  {object}  common.ApiResponse[responses.PriceStatsResponse]
 // @Failure      403  {object}  common.ApiResponse[responses.PriceStatsResponse]
-// @Router       /api/v1/price/stats/{id} [get]
+// @Router       /api/v1/prices/stats/{id} [get]
 func (c *PriceController) GetPriceStats(w http.ResponseWriter, r *http.Request) {
 	productID := chi.URLParam(r, "id")
 
@@ -292,7 +292,7 @@ func (c *PriceController) GetPriceStats(w http.ResponseWriter, r *http.Request) 
 // @Failure      400   {object}  common.ApiResponse[responses.PriceHistoryItem]
 // @Failure      401   {object}  common.ApiResponse[responses.PriceHistoryItem]
 // @Failure      403   {object}  common.ApiResponse[responses.PriceHistoryItem]
-// @Router       /api/v1/price/record [post]
+// @Router       /api/v1/prices/record [post]
 func (c *PriceController) RecordPrice(w http.ResponseWriter, r *http.Request) {
 	var req requests.RecordPriceRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

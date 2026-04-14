@@ -61,7 +61,7 @@ func SetupRoutes(
 	// ========================================
 
 	r.Route("/api/v1", func(r chi.Router) {
-		r.Route("/price", func(r chi.Router) {
+		r.Route("/prices", func(r chi.Router) {
 			// ========================================
 			// ENDPOINTS PÚBLICOS
 			// ========================================
