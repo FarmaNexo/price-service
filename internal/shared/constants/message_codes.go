@@ -22,6 +22,7 @@ const (
 	CodePriceRecorded          MessageCode = "PRC_008"
 	CodeAlertTriggered         MessageCode = "PRC_009"
 	CodeComparisonCreated      MessageCode = "PRC_010"
+	CodeAlternativesRetrieved  MessageCode = "PRC_011"
 
 	// Validation errors
 	CodeValidationError MessageCode = "VAL_001"
@@ -74,6 +75,7 @@ var MessageDescription = map[MessageCode]string{
 	CodePriceRecorded:           "Precio registrado exitosamente",
 	CodeAlertTriggered:          "Alerta de precio disparada",
 	CodeComparisonCreated:       "Comparación de precios creada exitosamente",
+	CodeAlternativesRetrieved:   "Alternativas terapéuticas obtenidas exitosamente",
 
 	// Validation
 	CodeValidationError: "Error de validación",

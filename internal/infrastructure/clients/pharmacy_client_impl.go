@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	neturl "net/url"
+	"strconv"
 	"time"
 
 	"github.com/farmanexo/price-service/internal/domain/services"
@@ -29,16 +31,33 @@ func NewPharmacyClient(baseURL string, logger *zap.Logger) *PharmacyClientImpl {
 	}
 }
 
+// Pharmacy Service responde con ApiResponse[InventoryListResponse]:
+//   { "datos": { "items": [...], "total": N }, "meta": {...} }
 type pharmacyInventoryAPIResponse struct {
-	Data []services.PharmacyInventoryItem `json:"datos"`
+	Data struct {
+		Items []services.PharmacyInventoryItem `json:"items"`
+		Total int                              `json:"total"`
+	} `json:"datos"`
 }
 
 type pharmacyInfoAPIResponse struct {
 	Data *services.PharmacyInfo `json:"datos"`
 }
 
-func (c *PharmacyClientImpl) GetProductPrices(ctx context.Context, productID string) ([]services.PharmacyInventoryItem, error) {
-	url := fmt.Sprintf("%s/api/v1/pharmacies/product/%s/inventory", c.baseURL, productID)
+func (c *PharmacyClientImpl) GetProductPrices(ctx context.Context, productID string, geo services.PriceCompareGeo) ([]services.PharmacyInventoryItem, error) {
+	// Endpoint correcto en pharmacy-service: /api/v1/pharmacies/inventory/product/{productId}
+	// (ver pharmacy-service routes — devuelve InventoryListResponse con farmacia + slug + precio).
+	// HU-014: si la query trae geo, propaga lat/lng/radius_km como query params.
+	url := fmt.Sprintf("%s/api/v1/pharmacies/inventory/product/%s", c.baseURL, productID)
+	if geo.IsActive() {
+		q := neturl.Values{}
+		q.Set("lat", strconv.FormatFloat(geo.Lat, 'f', -1, 64))
+		q.Set("lng", strconv.FormatFloat(geo.Lng, 'f', -1, 64))
+		if geo.RadiusKm > 0 {
+			q.Set("radius_km", strconv.FormatFloat(geo.RadiusKm, 'f', -1, 64))
+		}
+		url = url + "?" + q.Encode()
+	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -69,7 +88,7 @@ func (c *PharmacyClientImpl) GetProductPrices(ctx context.Context, productID str
 		return []services.PharmacyInventoryItem{}, nil
 	}
 
-	return apiResp.Data, nil
+	return apiResp.Data.Items, nil
 }
 
 func (c *PharmacyClientImpl) GetPharmacyInfo(ctx context.Context, pharmacyID string) (*services.PharmacyInfo, error) {

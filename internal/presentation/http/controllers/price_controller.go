@@ -158,6 +158,35 @@ func (c *PriceController) GetGenericVsBrand(w http.ResponseWriter, r *http.Reque
 	c.respondJSON(w, response)
 }
 
+// GetProductAlternatives godoc
+// @Summary      Alternativas terapéuticas (HU-015)
+// @Description  Retorna alternativas con la misma DCI ordenadas por mayor ahorro. Computa precio promedio en tiempo real consultando Pharmacy y Catalog. Cache 30min.
+// @Tags         Prices
+// @Produce      json
+// @Param        id     path  string  true   "Product ID base"
+// @Param        limit  query int     false  "Máximo de alternativas a retornar (default 10, máx 25)"
+// @Success      200  {object}  common.ApiResponse[responses.ProductAlternativesResponse]
+// @Failure      500  {object}  common.ApiResponse[responses.ProductAlternativesResponse]
+// @Router       /api/v1/prices/products/{id}/alternatives [get]
+func (c *PriceController) GetProductAlternatives(w http.ResponseWriter, r *http.Request) {
+	productID := chi.URLParam(r, "id")
+
+	limit := 0
+	if v := r.URL.Query().Get("limit"); v != "" {
+		if n, err := strconv.Atoi(v); err == nil {
+			limit = n
+		}
+	}
+
+	query := queries.GetProductAlternativesQuery{
+		ProductID: productID,
+		Limit:     limit,
+	}
+
+	response, _ := mediator.Send[queries.GetProductAlternativesQuery, responses.ProductAlternativesResponse](r.Context(), c.mediator, query)
+	c.respondJSON(w, response)
+}
+
 // ========================================
 // ALERTAS DE PRECIO
 // ========================================

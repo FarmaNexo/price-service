@@ -7,7 +7,9 @@ import "context"
 type ProductInfo struct {
 	ID               string `json:"id"`
 	Name             string `json:"name"`
+	Slug             string `json:"slug"`
 	ActiveIngredient string `json:"active_ingredient"`
+	Manufacturer     string `json:"manufacturer"`
 	Presentation     string `json:"presentation"`
 	IsGeneric        bool   `json:"is_generic"`
 	CategoryID       string `json:"category_id"`
@@ -17,5 +19,8 @@ type ProductInfo struct {
 // CatalogClient interfaz para comunicación con Catalog Service
 type CatalogClient interface {
 	GetProduct(ctx context.Context, productID string) (*ProductInfo, error)
-	GetProductsByActiveIngredient(ctx context.Context, activeIngredient string) ([]ProductInfo, error)
+	// GetProductsByActiveIngredient busca productos con el mismo principio activo (DCI),
+	// opcionalmente excluyendo un producto específico. Útil para encontrar alternativas
+	// terapéuticas (HU-015 — genéricos vs marca con misma DCI).
+	GetProductsByActiveIngredient(ctx context.Context, activeIngredient, excludeID string, limit int) ([]ProductInfo, error)
 }

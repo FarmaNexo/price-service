@@ -19,13 +19,20 @@ type PriceComparisonResponse struct {
 	TotalPharmacies int                 `json:"total_pharmacies"`
 }
 
-// PharmacyPriceItem precio por farmacia
+// PharmacyPriceItem precio por farmacia.
+// DistanceKm solo presente cuando la comparación incluye lat/lng (HU-014).
+// HU-016: district_avg_price + is_overpriced + overprice_pct para alertar
+// al usuario sobre precios elevados respecto al promedio de su distrito.
 type PharmacyPriceItem struct {
-	PharmacyID   string  `json:"pharmacy_id"`
-	PharmacyName string  `json:"pharmacy_name"`
-	Price        float64 `json:"price"`
-	Stock        int     `json:"stock"`
-	IsAvailable  bool    `json:"is_available"`
+	PharmacyID       string   `json:"pharmacy_id"`
+	PharmacyName     string   `json:"pharmacy_name"`
+	Price            float64  `json:"price"`
+	Stock            int      `json:"stock"`
+	IsAvailable      bool     `json:"is_available"`
+	DistanceKm       *float64 `json:"distance_km,omitempty"`
+	DistrictAvgPrice *float64 `json:"district_avg_price,omitempty"`
+	IsOverpriced     bool     `json:"is_overpriced"`
+	OverpricePct     *float64 `json:"overprice_pct,omitempty"`
 }
 
 // ========================================
@@ -148,6 +155,38 @@ type GenericBrandItem struct {
 	RelatedAvgPrice    float64 `json:"related_avg_price"`
 	SavingsPercentage  float64 `json:"savings_percentage"`
 	ActiveIngredient   string  `json:"active_ingredient"`
+}
+
+// ========================================
+// THERAPEUTIC ALTERNATIVES (HU-015)
+// ========================================
+
+// ProductAlternativeItem — una alternativa terapéutica para un producto base.
+// El % de ahorro se calcula contra el precio promedio del producto base:
+//
+//	savings_percentage = (base_avg_price - alternative_avg_price) / base_avg_price * 100
+//
+// Si la alternativa es más cara que el base, savings_percentage es negativo.
+type ProductAlternativeItem struct {
+	ProductID         string  `json:"product_id"`
+	ProductName       string  `json:"product_name"`
+	ProductSlug       string  `json:"product_slug,omitempty"`
+	IsGeneric         bool    `json:"is_generic"`
+	Manufacturer      string  `json:"manufacturer,omitempty"`
+	Presentation      string  `json:"presentation,omitempty"`
+	AvgPrice          float64 `json:"avg_price"`
+	PharmaciesCount   int     `json:"pharmacies_count"` // Cuántas farmacias venden esta alternativa
+	SavingsPercentage float64 `json:"savings_percentage"`
+}
+
+// ProductAlternativesResponse — respuesta del endpoint de alternativas terapéuticas.
+type ProductAlternativesResponse struct {
+	BaseProductID       string                   `json:"base_product_id"`
+	BaseProductName     string                   `json:"base_product_name"`
+	BaseAvgPrice        float64                  `json:"base_avg_price"`
+	ActiveIngredient    string                   `json:"active_ingredient"`
+	Alternatives        []ProductAlternativeItem `json:"alternatives"`
+	Total               int                      `json:"total"`
 }
 
 // ========================================

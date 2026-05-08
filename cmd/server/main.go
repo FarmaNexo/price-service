@@ -120,7 +120,7 @@ func main() {
 
 	// HTTP Clients
 	pharmacyClient := clients.NewPharmacyClient(cfg.Services.PharmacyService.BaseURL, zapLogger)
-	_ = clients.NewCatalogClient(cfg.Services.CatalogService.BaseURL, zapLogger)
+	catalogClient := clients.NewCatalogClient(cfg.Services.CatalogService.BaseURL, zapLogger)
 
 	// ========================================
 	// SQS CONSUMER
@@ -166,6 +166,12 @@ func main() {
 
 	getGenericVsBrandHandler := handlers.NewGetGenericVsBrandHandler(genericBrandRepo, cacheService, zapLogger)
 	mediator.RegisterHandler(med, getGenericVsBrandHandler)
+
+	// HU-015 — Alternativas terapéuticas en tiempo real (mismo DCI, ordenadas por ahorro)
+	getProductAlternativesHandler := handlers.NewGetProductAlternativesHandler(
+		catalogClient, pharmacyClient, cacheService, zapLogger,
+	)
+	mediator.RegisterHandler(med, getProductAlternativesHandler)
 
 	getPriceStatsHandler := handlers.NewGetPriceStatsHandler(priceHistoryRepo, cacheService, zapLogger)
 	mediator.RegisterHandler(med, getPriceStatsHandler)

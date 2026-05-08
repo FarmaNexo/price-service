@@ -68,6 +68,8 @@ func SetupRoutes(
 			r.Post("/compare", priceController.ComparePrices)
 			r.Get("/compare/generic-vs-brand/{id}", priceController.GetGenericVsBrand)
 			r.Get("/history/{id}", priceController.GetPriceHistory)
+			// HU-015 — Alternativas terapéuticas en tiempo real (mismo DCI, ordenadas por ahorro)
+			r.Get("/products/{id}/alternatives", priceController.GetProductAlternatives)
 
 			// ========================================
 			// ENDPOINTS AUTENTICADOS (Requiere JWT)
